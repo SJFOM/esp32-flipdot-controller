@@ -10,8 +10,9 @@
 #include "freertos/semphr.h"
 #include "driver/gpio.h"
 #include "flipdot.h"
+#include "sdkconfig.h"
 
-static const char* TAG = "FD";
+static const char *TAG = "FD";
 
 static bool dotboard_synced = false;
 static dotboard_t last_written_dotboard;
@@ -25,8 +26,13 @@ void flipdot_init()
     ESP_LOGI(TAG, "setting up GPIO pins");
 
     // Use pins for GPIO
-    PIN_FUNC_SELECT(GPIO_PIN_MUX_REG[PIN_LED_YELLOW], PIN_FUNC_GPIO);
-    PIN_FUNC_SELECT(GPIO_PIN_MUX_REG[PIN_LED_GREEN], PIN_FUNC_GPIO);
+    // FIXME: Had to remove these for the code to compile, might need to be put back in to work...
+    // PIN_FUNC_SELECT(GPIO_PIN_MUX_REG[PIN_LED_YELLOW], PIN_FUNC_GPIO);
+    // PIN_FUNC_SELECT(GPIO_PIN_MUX_REG[PIN_LED_GREEN], PIN_FUNC_GPIO);
+
+    // TODO: Check if these work (untested)
+    gpio_iomux_out(PIN_LED_YELLOW, PIN_FUNC_GPIO, false);
+    gpio_iomux_out(PIN_LED_GREEN, PIN_FUNC_GPIO, false);
 
     // All outputs
     gpio_set_direction(PIN_ENABLE, GPIO_MODE_OUTPUT);
@@ -35,7 +41,7 @@ void flipdot_init()
     gpio_set_direction(PIN_SET_UNSET, GPIO_MODE_OUTPUT);
     gpio_set_direction(PIN_ROW_ADVANCE, GPIO_MODE_OUTPUT);
     gpio_set_direction(PIN_COIL_DRIVE, GPIO_MODE_OUTPUT);
-    
+
     // LEDs
     gpio_set_direction(PIN_LED_GREEN, GPIO_MODE_OUTPUT);
     gpio_set_direction(PIN_LED_YELLOW, GPIO_MODE_OUTPUT);
@@ -53,8 +59,10 @@ void flipdot_init()
     gpio_set_level(PIN_LED_RED, 0);
 
     // Create space for a backing store for the last-written dotboard
-    for (uint c = 0; c < DOT_COLUMNS; c ++) {
-        for (uint r = 0; r < DOT_ROWS; r ++) {
+    for (uint c = 0; c < DOT_COLUMNS; c++)
+    {
+        for (uint r = 0; r < DOT_ROWS; r++)
+        {
             last_written_dotboard[c][r] = 0;
         }
     }
@@ -66,7 +74,8 @@ void flipdot_init()
 static void wait(uint wait_us)
 {
     uint32_t c_current = 0, c_start = XTHAL_GET_CCOUNT();
-    do {
+    do
+    {
         c_current = XTHAL_GET_CCOUNT();
     } while (c_current - c_start < CYCLES_PER_US * wait_us);
 }
@@ -123,12 +132,12 @@ static void disable()
 
 /**
  * Write an entire dotboard.
- * 
+ *
  * Only dots that need to change state will be pulsed unless is_keyframe is stated.
  * In calling code, I'd ensure is_keyframe is occasionally set in case the dotboard is
  * ever disconnected from the controller for a moment.
  */
-void write_dotboard(dotboard_t* dots, bool is_keyframe)
+void write_dotboard(dotboard_t *dots, bool is_keyframe)
 {
     gpio_set_level(PIN_LED_RED, 1);
 
@@ -144,32 +153,33 @@ void write_dotboard(dotboard_t* dots, bool is_keyframe)
     wait(1);
 
     // For each column
-    for (uint c = 0; c < DOT_COLUMNS; c ++) {
+    for (uint c = 0; c < DOT_COLUMNS; c++)
+    {
 
         // For each row in the column...
-        for (uint r = 0; r < DOT_ROWS; r ++) {
-        
-        // Skip dots that don't need updating
-        if (is_keyframe || (*dots)[c][r] != last_written_dotboard[c][r]) {
+        for (uint r = 0; r < DOT_ROWS; r++)
+        {
 
-            // Set up the set/unset pin
-            setup_state((*dots)[c][r]);
+            // Skip dots that don't need updating
+            if (is_keyframe || (*dots)[c][r] != last_written_dotboard[c][r])
+            {
+
+                // Set up the set/unset pin
+                setup_state((*dots)[c][r]);
+                wait(1);
+
+                // Pulse the coil drive
+                pulse_coil();
+            }
+
+            // Advance the row
+            row_advance();
             wait(1);
-
-            // Pulse the coil drive
-            pulse_coil();
-
-        }
-
-        // Advance the row
-        row_advance();
-        wait(1);
         }
 
         // Advance the column
         column_advance();
         wait(1);
-
     }
 
     // Disable when done
@@ -177,9 +187,11 @@ void write_dotboard(dotboard_t* dots, bool is_keyframe)
     gpio_set_level(PIN_LED_RED, 0);
 
     // Update the buffer with the new dotboard
-    for (uint c = 0; c < DOT_COLUMNS; c ++) {
-        for (uint r = 0; r < DOT_ROWS; r ++) {
-        last_written_dotboard[c][r] = (*dots)[c][r];
+    for (uint c = 0; c < DOT_COLUMNS; c++)
+    {
+        for (uint r = 0; r < DOT_ROWS; r++)
+        {
+            last_written_dotboard[c][r] = (*dots)[c][r];
         }
     }
 

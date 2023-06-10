@@ -256,5 +256,5 @@ void snake_update()
     write_dotboard(&dots, false);
 
     // Inter-frame delay inversely proportional to the tail length
-    vTaskDelay((100 - snake.tail_length * 2) / portTICK_RATE_MS);
+    vTaskDelay((100 - snake.tail_length * 2) / portTICK_PERIOD_MS);
 }

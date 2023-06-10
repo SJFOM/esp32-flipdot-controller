@@ -7,13 +7,15 @@
 #include "xtensa/core-macros.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "soc/io_mux_reg.h"
+#include "sdkconfig.h"
 #include "flipdot.h"
 #include "fill.h"
 #include "main.h"
 #include "scroll.h"
 #include "snake.h"
 
-static const char* TAG = "Main";
+static const char *TAG = "Main";
 
 static bool button_held = false;
 
@@ -38,13 +40,18 @@ void app_main()
     fill_off(&clean_board);
 
     // Continually update the display
-    while (1) {
+    while (1)
+    {
 
         // Detect mode changes
-        if (!gpio_get_level(PIN_BUTTON)) {
+        if (!gpio_get_level(PIN_BUTTON))
+        {
             button_held = true;
-        } else {
-            if (button_held) {
+        }
+        else
+        {
+            if (button_held)
+            {
                 // Button has now been released, enact the change
                 mode = mode == MODE_MAX - 1 ? 0 : mode + 1;
                 write_dotboard(&clean_board, false);
@@ -53,8 +60,9 @@ void app_main()
             }
         }
 
-        switch (mode) {
-        
+        switch (mode)
+        {
+
         case MODE_SCROLL:
             scroll_update();
             break;
@@ -65,9 +73,8 @@ void app_main()
 
         default:
             break;
-            
         }
 
-        vTaskDelay(50 / portTICK_RATE_MS);
+        vTaskDelay(50 / portTICK_PERIOD_MS);
     }
 }

@@ -18,3 +18,11 @@ See the associated [blog post on damow.net](https://damow.net/fun-with-flip-dot-
 * **GPIO 5** - Row Advance (**Pin 10**)
 
 In addition, **GPIO 4** controls the coil drive on **Pin 12** via a _FET/BJT_.
+
+
+## ESP-IDF repo setup
+
+1. Run `. ~/esp/esp-idf/export.sh` from the workspace directory (not within main)
+2. Now run \"idf.py menuconfig\" to set up repo"
+3. Then run \"idf.py build\" to build firmware image"
+4. Use \"idf.py flash -p /dev/tty.PORT_NAME\" to flash"
