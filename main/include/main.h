@@ -6,6 +6,7 @@
 typedef enum {
     MODE_SCROLL,
     MODE_SNAKE,
+    MODE_EMPTY,
     MODE_MAX
 } sys_mode_t;
 

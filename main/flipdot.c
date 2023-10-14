@@ -25,15 +25,6 @@ void flipdot_init()
     // Set up the GPIO pins for the signalling
     ESP_LOGI(TAG, "setting up GPIO pins");
 
-    // Use pins for GPIO
-    // FIXME: Had to remove these for the code to compile, might need to be put back in to work...
-    // PIN_FUNC_SELECT(GPIO_PIN_MUX_REG[PIN_LED_YELLOW], PIN_FUNC_GPIO);
-    // PIN_FUNC_SELECT(GPIO_PIN_MUX_REG[PIN_LED_GREEN], PIN_FUNC_GPIO);
-
-    // TODO: Check if these work (untested)
-    gpio_iomux_out(PIN_LED_YELLOW, PIN_FUNC_GPIO, false);
-    gpio_iomux_out(PIN_LED_GREEN, PIN_FUNC_GPIO, false);
-
     // All outputs
     gpio_set_direction(PIN_ENABLE, GPIO_MODE_OUTPUT);
     gpio_set_direction(PIN_COLUMN_ADVANCE, GPIO_MODE_OUTPUT);

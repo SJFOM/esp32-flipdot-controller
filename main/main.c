@@ -30,7 +30,7 @@ void app_main()
     gpio_set_direction(PIN_BUTTON, GPIO_MODE_INPUT);
 
     // Initialise display
-    flipdot_init();
+            flipdot_init();
 
     // Initialise snake game
     snake_init();
@@ -69,6 +69,9 @@ void app_main()
 
         case MODE_SNAKE:
             snake_update();
+            break;
+
+        case MODE_EMPTY:
             break;
 
         default:
