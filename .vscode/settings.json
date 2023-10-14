@@ -1,6 +1,9 @@
 {
     "files.associations": {
-        "flipdot.h": "c"
+        "flipdot.h": "c",
+        "freertos.h": "c",
+        "core-macros.h": "c",
+        "sdkconfig.h": "c"
     },
     "idf.adapterTargetName": "esp32",
     "idf.espIdfPath": "/Users/samomahony/esp/esp-idf",
@@ -23,5 +26,6 @@
         "target/esp32.cfg"
     ],
     "idf.portWin": "COM4",
-    "C_Cpp.default.compilerPath": "c:\\Users\\samom\\.espressif\\tools\\xtensa-esp32-elf\\esp-12.2.0_20230208\\xtensa-esp32-elf\\bin\\xtensa-esp32-elf-gcc-12.2.0.exe"
+    "C_Cpp.default.compilerPath": "c:\\Users\\samom\\.espressif\\tools\\xtensa-esp32-elf\\esp-12.2.0_20230208\\xtensa-esp32-elf\\bin\\xtensa-esp32-elf-gcc-12.2.0.exe",
+    "C_Cpp.formatting": "clangFormat"
 }

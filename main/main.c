@@ -30,14 +30,14 @@ void app_main()
     gpio_set_direction(PIN_BUTTON, GPIO_MODE_INPUT);
 
     // Initialise display
-            flipdot_init();
+    flipdot_init();
 
     // Initialise snake game
     snake_init();
 
     // A clean board to write after mode changes
     dotboard_t clean_board;
-    fill_off(&clean_board);
+    fill_on(&clean_board);
 
     // Continually update the display
     while (1)
