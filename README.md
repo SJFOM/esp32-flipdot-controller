@@ -19,6 +19,12 @@
 ### If path build issues occur
 If build issues occur, try adding `C:\Users\USER_NAME\.espressif\tools\idf-python\3.11.2\Scripts` to path. Change **USER_NAME** for your username and check the Python version above matches what is installed by the ESP-IDF-Explorer toolchain.
 
+## MacOS: On first setup
+ESP-IDF requires some packages be installed beforehand - these can be installed using Homebrew with the following command
+```shell
+brew update; brew install cmake dfu-util
+```
+
 ## Pinout
 
 **GPIO** numbers refer to the ESP32 GPIO pins.

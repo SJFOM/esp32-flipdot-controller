@@ -1,34 +1,40 @@
 {
-    "env": {
-        "myDefaultIncludePath": [
-            "${workspaceFolder}",
-            "${workspaceFolder}/**"
-        ]
+  "env": {
+    "myDefaultIncludePath": [
+      "${workspaceFolder}",
+      "${workspaceFolder}/**"
+    ]
+  },
+  "configurations": [
+    {
+      "name": "Mac",
+      "includePath": [
+        "${workspaceFolder}/**",
+        "${workspaceFolder}/build/config",
+        "/Users/sam/.espressif/v6.0/esp-idf/components/**"
+      ],
+      "defines": [
+        "ESP_PLATFORM",
+        "IDF_VER=v6.0"
+      ],
+      "macFrameworkPath": [
+        "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks"
+      ],
+      "compilerPath": "/usr/bin/clang",
+      "cStandard": "c17",
+      "cppStandard": "c++17",
+      "intelliSenseMode": "macos-clang-x64",
+      "configurationProvider": "ms-vscode.cmake-tools",
+      "compileCommands": "/Users/sam/Documents/code/esp32-flipdot-controller/build/compile_commands.json"
     },
-    "configurations": [
-        {
-            "name": "Mac",
-            "includePath": [
-                "${workspaceFolder}/**"
-            ],
-            "defines": [],
-            "macFrameworkPath": [
-                "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks"
-            ],
-            "compilerPath": "/usr/bin/clang",
-            "cStandard": "c17",
-            "cppStandard": "c++17",
-            "intelliSenseMode": "macos-clang-x64",
-            "configurationProvider": "ms-vscode.cmake-tools"
-        },
-        {
-            "name": "Win32",
-            "includePath": [
-                "${workspaceFolder}\\**",
-                "C:\\Users\\samom\\esp\\esp-idf\\components\\**"
-            ],
-            "defines": []
-        }
-    ],
-    "version": 4
+    {
+      "name": "Win32",
+      "includePath": [
+        "${workspaceFolder}\\**",
+        "C:\\Users\\samom\\esp\\esp-idf\\components\\**"
+      ],
+      "defines": []
+    }
+  ],
+  "version": 4
 }
