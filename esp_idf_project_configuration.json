@@ -8,9 +8,9 @@
       "sdkconfigFilePath": "/Users/sam/Documents/code/esp32-flipdot-controller/sdkconfig"
     },
     "env": {},
-    "flashBaudRate": "",
+    "flashBaudRate": "921600",
     "idfTarget": "esp32",
-    "monitorBaudRate": "",
+    "monitorBaudRate": "115200",
     "openOCD": {
       "debugLevel": -1,
       "configs": [],
