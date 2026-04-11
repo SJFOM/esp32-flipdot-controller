@@ -5,8 +5,8 @@
 #include <stdbool.h>
 
 // Dimensions
-#define DOT_ROWS 14
-#define DOT_COLUMNS 20
+#define DOT_ROWS 20
+#define DOT_COLUMNS 14
 
 // GPIO Pin Definitions
 #define PIN_ENABLE 21
@@ -32,6 +32,6 @@ typedef column_t dotboard_t[DOT_COLUMNS];
 
 // Public subs
 void flipdot_init();
-void write_dotboard(dotboard_t* dots, bool is_keyframe);
+void write_dotboard(dotboard_t *dots, bool is_keyframe);
 
 #endif

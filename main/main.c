@@ -14,6 +14,7 @@
 #include "main.h"
 #include "scroll.h"
 #include "snake.h"
+#include "firework.h"
 
 static const char *TAG = "Main";
 
@@ -34,6 +35,9 @@ void app_main()
 
     // Initialise snake game
     snake_init();
+
+    // Initialise firework animation
+    firework_init();
 
     // A clean board to write after mode changes
     dotboard_t clean_board;
@@ -70,6 +74,22 @@ void app_main()
         case MODE_SNAKE:
             snake_update();
             break;
+
+        case MODE_FIREWORK:
+        {
+            static uint16_t fw_trigger_counter = 0;
+            if (fw_trigger_counter == 0)
+            {
+                trigger_firework(1 + rand() % 10);
+            }
+            fw_trigger_counter++;
+            if (fw_trigger_counter >= 200)
+            {
+                fw_trigger_counter = 0;
+            }
+            firework_update();
+            break;
+        }
 
         case MODE_EMPTY:
             break;

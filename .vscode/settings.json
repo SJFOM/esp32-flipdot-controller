@@ -13,5 +13,9 @@
     "--background-index",
     "--query-driver=**",
     "--compile-commands-dir=${workspaceFolder}/build"
-  ]
+  ],
+  "chat.tools.terminal.autoApprove": {
+    "gcc": true,
+    "timeout": true
+  }
 }

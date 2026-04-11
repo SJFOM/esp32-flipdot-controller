@@ -3,9 +3,11 @@
 
 #define PIN_BUTTON 0
 
-typedef enum {
+typedef enum
+{
     MODE_SCROLL,
     MODE_SNAKE,
+    MODE_FIREWORK,
     MODE_EMPTY,
     MODE_MAX
 } sys_mode_t;

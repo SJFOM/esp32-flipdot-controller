@@ -1,0 +1,57 @@
+# Makefile for Firework Animation Test
+# Compiles firework.c directly against the test harness
+
+CC = gcc
+CFLAGS = -std=c99 -Wall -Wextra -O2
+LIBS = -lm
+INCLUDE = -I../main/include -Imock_headers
+
+# Source files
+SOURCES = firework_test.c ../main/firework.c ../main/fill.c
+HEADERS = ../main/include/firework.h ../main/include/flipdot.h ../main/include/fill.h
+
+# Output
+TARGET = firework_test
+
+# Default target
+all: $(TARGET)
+
+# Build the test executable
+$(TARGET): $(SOURCES) $(HEADERS)
+	@echo "Compiling Firework Animation Test..."
+	$(CC) $(CFLAGS) $(INCLUDE) -o $@ $(SOURCES) $(LIBS)
+	@echo "✓ Build successful: ./$(TARGET)"
+
+# Run the test with default duration (30 seconds)
+run: $(TARGET)
+	@echo "Running firework animation test (30 seconds)..."
+	./$(TARGET)
+
+# Run with custom duration (e.g., make run-60)
+run-%: $(TARGET)
+	@echo "Running firework animation test for $* seconds..."
+	./$(TARGET) $*
+
+# Clean build artifacts
+clean:
+	@echo "Cleaning build artifacts..."
+	rm -f $(TARGET)
+	@echo "✓ Clean complete"
+
+# Help target
+help:
+	@echo "Firework Animation Test - Build Targets"
+	@echo "========================================"
+	@echo "  make              - Build the test executable"
+	@echo "  make run          - Build and run for 30 seconds"
+	@echo "  make run-60       - Build and run for 60 seconds"
+	@echo "  make clean        - Remove build artifacts"
+	@echo "  make help         - Show this help message"
+	@echo ""
+	@echo "Usage Examples:"
+	@echo "  ./firework_test            # Run for 30 seconds"
+	@echo "  ./firework_test 60         # Run for 60 seconds"
+	@echo "  ./firework_test 120        # Run for 2 minutes"
+
+
+.PHONY: all run clean help

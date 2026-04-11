@@ -25,6 +25,52 @@ ESP-IDF requires some packages be installed beforehand - these can be installed 
 brew update; brew install cmake dfu-util
 ```
 
+## Testing Animations (Without Hardware)
+
+A standalone C test harness is included to visualize and test animations without physical hardware. Currently supports testing the **Firework Animation**.
+
+### Quick Start
+
+**Using Make (Recommended):**
+```bash
+cd /workspaces/esp32-flipdot-controller/firework_animation_testing
+
+# Build and run for 30 seconds (default)
+make -f Makefile.firework run
+
+# Build and run for a custom duration
+make -f Makefile.firework run-60    # 60 seconds
+```
+
+**Direct Compilation:**
+```bash
+cd /workspaces/esp32-flipdot-controller/firework_animation_testing
+
+gcc -std=c99 -Wall -Wextra -O2 -o firework_test firework_test.c \
+    ../main/firework.c ../main/fill.c -I../main/include -Imock_headers -lm
+
+./firework_test [DURATION_SECONDS]
+```
+
+### What You'll See
+
+- Real-time ASCII art visualization of the 20×14 dot matrix in landscape orientation
+- `█` = LED on, `·` = LED off  
+- Frame counter, elapsed time, next firework scale (1–10), and countdown to next trigger
+- Fireworks fire at random scale and random 1–10 second intervals
+- Particle animations with gravity simulation — larger scale = more particles, higher speed, longer lifespan
+- Press **Ctrl+C** to stop at any time
+- Final statistics: total frames and average FPS
+
+### How It Works
+
+The test harness (`firework_test.c`) provides:
+- **Complete hardware mocking** - FreeRTOS, ESP-IDF logging, and display functions
+- **Direct compilation** - Compiles your actual animation code without modifications
+- **Terminal rendering** - Visual feedback of the animation in real-time
+
+For detailed information, see [firework_animation_testing/README_FIREWORK_TEST.md](firework_animation_testing/README_FIREWORK_TEST.md).
+
 ## Pinout
 
 **GPIO** numbers refer to the ESP32 GPIO pins.
