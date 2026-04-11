@@ -67,50 +67,6 @@ static void update_direction_user(snake_t *snake)
 }
 
 /**
- * Use a fill algorithm to decide the next best direction change.
- */
-static void update_direction_ai(snake_t *snake)
-{
-    uint8_t read_char;
-    ETS_STATUS s = uart_rx_one_char(&read_char);
-    if (s == ETS_OK)
-    {
-        // Change the direction as appropriate
-        switch (read_char)
-        {
-        case 'w':
-            if (snake->direction != DIRECTION_DOWN)
-            {
-                snake->direction = DIRECTION_UP;
-                ESP_LOGI(TAG, "Changed direction to UP");
-            }
-            break;
-        case 'a':
-            if (snake->direction != DIRECTION_RIGHT)
-            {
-                snake->direction = DIRECTION_LEFT;
-                ESP_LOGI(TAG, "Changed direction to LEFT");
-            }
-            break;
-        case 's':
-            if (snake->direction != DIRECTION_UP)
-            {
-                snake->direction = DIRECTION_DOWN;
-                ESP_LOGI(TAG, "Changed direction to DOWN");
-            }
-            break;
-        case 'd':
-            if (snake->direction != DIRECTION_LEFT)
-            {
-                snake->direction = DIRECTION_RIGHT;
-                ESP_LOGI(TAG, "Changed direction to RIGHT");
-            }
-            break;
-        }
-    }
-}
-
-/**
  * Advance the snake position by one tick.
  */
 static void update_position(snake_t *snake)
@@ -226,7 +182,7 @@ void snake_init()
 void death_screen()
 {
     // Draw "GAME OVER" text
-    fill_off(&dots);
+    fill_on_off(&dots, false);
     render_text_4x5(&dots, 0, 1, "GAME");
     render_text_4x5(&dots, 1, 7, "OVER");
     write_dotboard(&dots, false);
@@ -257,7 +213,7 @@ void snake_update()
     }
 
     // Clear the frame-buffer
-    fill_off(&dots);
+    fill_on_off(&dots, false);
 
     // Advance the snake position
     update_position(&snake);

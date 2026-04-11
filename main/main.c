@@ -37,7 +37,7 @@ void app_main()
 
     // A clean board to write after mode changes
     dotboard_t clean_board;
-    fill_on(&clean_board);
+    fill_on_off(&clean_board, true);
 
     // Continually update the display
     while (1)

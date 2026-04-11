@@ -16,7 +16,7 @@ static int x = DOT_COLUMNS;
 void scroll_update()
 {
     // Unset the whole board
-    fill_off(&dots);
+    fill_on_off(&dots, false);
 
     // Draw some text
     render_text_4x5(&dots, x, 4, text);
