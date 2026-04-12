@@ -197,7 +197,7 @@ void trigger_firework(uint8_t scale)
     uint8_t lifespan = PARTICLE_LIFESPAN_MIN + (scale - 1) * 4; // 20 (scale 1) to 56 (scale 10)
 
     uint8_t center_x = rand() % DOT_COLUMNS;
-    uint8_t center_y = rand() % DOT_ROWS;
+    uint8_t center_y = rand() % (DOT_ROWS/2); // Keep fireworks in upper half for better visibility
 
     ESP_LOGI(TAG, "Triggering firework: scale=%d, particles=%d, speed_max=%.1f, lifespan=%d",
              scale, particle_count, speed_max, lifespan);

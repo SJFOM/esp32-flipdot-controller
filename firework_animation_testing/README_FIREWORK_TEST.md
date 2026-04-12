@@ -9,7 +9,7 @@ This is a standalone C test application that compiles directly against `firework
   - FreeRTOS (`vTaskDelay`)
   - ESP-IDF logging (`ESP_LOGI`, `ESP_LOGW`, `ESP_LOGE`)
   - Hardware interface (`write_dotboard`)
-- **ASCII Visualization**: Real-time landscape terminal display of the dot matrix animation (20×14)
+- **ASCII Visualization**: Real-time terminal display of the dot matrix animation (20×14)
 - **Random Triggering**: Fireworks fire at random intervals (1–10 seconds) with random scale (1–10)
 - **Scale-Based Explosions**: Each firework uses `trigger_firework(scale)` — scale controls particle count, speed, and lifespan
 - **Performance Metrics**: Shows frame count, elapsed time, and FPS
@@ -71,7 +71,7 @@ gcc -std=c99 -Wall -Wextra -O2 -o firework_test firework_test.c ../main/firework
 ```
 ╔════════════════════════════════════════════════════════════════╗
 ║  Firework Animation Test                                       ║
-║  Frame: 2       |  Time: 1.11s  |  Dots: 20×14 (landscape)    ║
+║  Frame: 2       |  Time: 1.11s  |  Dots: 20×14               ║
 ║  Next scale: 7 /10  |  Next firework in: 4.5s                  ║
 ╠════════════════════════════════════════════════════════════════╣
 ║     0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1                   ║

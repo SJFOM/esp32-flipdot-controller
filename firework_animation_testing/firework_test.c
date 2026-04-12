@@ -101,8 +101,8 @@ static void render_frame_terminal(void)
 
     printf("╔════════════════════════════════════════════════════════════════╗\n");
     printf("║  Firework Animation Test                                       ║\n");
-    printf("║  Frame: %-6u  |  Time: %.2fs  |  Dots: %d×%d (landscape)    ║\n",
-           frame_number, elapsed, DOT_ROWS, DOT_COLUMNS);
+    printf("║  Frame: %-6u  |  Time: %.2fs  |  Dots: %d×%d               ║\n",
+           frame_number, elapsed, DOT_COLUMNS, DOT_ROWS);
     if (next_scale > 0)
     {
         printf("║  Next scale: %-2d/10  |  Next firework in: %.1fs                  ║\n",
@@ -114,27 +114,27 @@ static void render_frame_terminal(void)
     }
     printf("╠════════════════════════════════════════════════════════════════╣\n");
 
-    /* Print the board (landscape orientation: rows as width, columns as height) */
+    /* Print the board in natural orientation: rows top-to-bottom, columns left-to-right */
     /* Column labels (top) */
     printf("║    ");
-    for (uint8_t row = 0; row < DOT_ROWS; row++)
+    for (uint8_t col = 0; col < DOT_COLUMNS; col++)
     {
-        printf(" %X", (row / 10) % 10);
+        printf(" %X", (col / 10) % 10);
     }
     printf("    \t\t║\n");
 
     printf("║    ");
-    for (uint8_t row = 0; row < DOT_ROWS; row++)
+    for (uint8_t col = 0; col < DOT_COLUMNS; col++)
     {
-        printf(" %X", row % 10);
+        printf(" %X", col % 10);
     }
     printf("     \t\t║\n");
 
-    /* Render each column as a row (transposed landscape view) */
-    for (uint8_t col = 0; col < DOT_COLUMNS; col++)
+    /* Render each row */
+    for (uint8_t row = 0; row < DOT_ROWS; row++)
     {
-        printf("║ %2d ", col);
-        for (uint8_t row = 0; row < DOT_ROWS; row++)
+        printf("║ %2d ", row);
+        for (uint8_t col = 0; col < DOT_COLUMNS; col++)
         {
             if ((*board)[col][row])
             {
@@ -145,20 +145,20 @@ static void render_frame_terminal(void)
                 printf(" ·");
             }
         }
-        printf(" %2d\t\t║\n", col);
+        printf(" %2d\t\t║\n", row);
     }
 
     printf("║    ");
-    for (uint8_t row = 0; row < DOT_ROWS; row++)
+    for (uint8_t col = 0; col < DOT_COLUMNS; col++)
     {
-        printf(" %X", row % 10);
+        printf(" %X", col % 10);
     }
     printf("    \t\t║\n");
 
     printf("║    ");
-    for (uint8_t row = 0; row < DOT_ROWS; row++)
+    for (uint8_t col = 0; col < DOT_COLUMNS; col++)
     {
-        printf(" %X", (row / 10) % 10);
+        printf(" %X", (col / 10) % 10);
     }
     printf("    \t\t║\n");
 
@@ -202,8 +202,8 @@ int main(int argc, char *argv[])
     printf("╔════════════════════════════════════════════════════════════════╗\n");
     printf("║  Firework Animation Test (C Implementation)                    ║\n");
     printf("║                                                                ║\n");
-    printf("║  Display: %d×%d dots (landscape)                             ║\n",
-           DOT_ROWS, DOT_COLUMNS);
+    printf("║  Display: %d×%d dots                                         ║\n",
+           DOT_COLUMNS, DOT_ROWS);
     printf("║  Duration: %d seconds                                          ║\n",
            duration_seconds);
     printf("║  Frame Rate: 50ms per frame                                    ║\n");

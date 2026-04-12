@@ -1,2 +1,6 @@
 build/
 sdkconfig.old
+
+# Ignore build artifacts and configuration files
+sdkconfig
+firework_test

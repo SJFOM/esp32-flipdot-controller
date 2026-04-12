@@ -5,10 +5,10 @@
       "ninjaArgs": [],
       "buildDirectoryPath": "",
       "sdkconfigDefaults": [],
-      "sdkconfigFilePath": "/Users/sam/Documents/code/esp32-flipdot-controller/sdkconfig"
+      "sdkconfigFilePath": "${workspaceFolder}/sdkconfig"
     },
     "env": {},
-    "flashBaudRate": "921600",
+    "flashBaudRate": "460800",
     "idfTarget": "esp32",
     "monitorBaudRate": "115200",
     "openOCD": {

@@ -17,5 +17,6 @@
   "chat.tools.terminal.autoApprove": {
     "gcc": true,
     "timeout": true
-  }
+  },
+  "idf.portWin": "COM7"
 }
