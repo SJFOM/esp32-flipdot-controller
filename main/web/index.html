@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Flipdot Controller</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:monospace;background:#0d0d0d;color:#ddd;display:flex;flex-direction:column;align-items:center;min-height:100vh;padding:2.5rem 1rem}
+h1{font-size:1.1rem;letter-spacing:.2em;color:#fff;margin-bottom:.3rem}
+.sub{font-size:.7rem;color:#444;letter-spacing:.08em;margin-bottom:2.5rem}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;width:100%;max-width:340px}
+button{padding:1.5rem 1rem;border:2px solid #222;background:#141414;color:#555;font-family:monospace;font-size:.8rem;letter-spacing:.1em;cursor:pointer;border-radius:3px;transition:border-color .12s,color .12s,background .12s;text-transform:uppercase}
+button:hover{border-color:#444;color:#bbb}
+button.active{border-color:#f5a623;color:#f5a623;background:#19140000}
+.footer{margin-top:2rem;font-size:.65rem;color:#333;letter-spacing:.04em}
+</style>
+</head>
+<body>
+<h1>FLIPDOT CONTROLLER</h1>
+<p class="sub">damow.net</p>
+<div class="grid" id="grid"></div>
+<p class="footer" id="status">connecting...</p>
+<script>
+var cur=-1;
+var grid=document.getElementById('grid');
+var status=document.getElementById('status');
+
+fetch('/modes').then(function(r){return r.json();}).then(function(modes){
+  modes.forEach(function(m){
+    var b=document.createElement('button');
+    b.id='m'+m.id;
+    b.textContent=m.name;
+    b.onclick=function(){
+      fetch('/mode',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mode:m.id})}).then(poll);
+    };
+    grid.appendChild(b);
+  });
+  poll();
+  setInterval(poll,1000);
+}).catch(function(){
+  status.textContent='failed to load modes';
+});
+
+function poll(){
+  fetch('/mode').then(function(r){return r.json();}).then(function(d){
+    if(d.mode!==cur){
+      cur=d.mode;
+      var btns=grid.querySelectorAll('button');
+      btns.forEach(function(b){b.classList.remove('active');});
+      var active=document.getElementById('m'+cur);
+      if(active)active.classList.add('active');
+    }
+    status.textContent='updated '+new Date().toLocaleTimeString();
+  }).catch(function(){
+    status.textContent='connection lost';
+  });
+}
+</script>
+</body>
+</html>

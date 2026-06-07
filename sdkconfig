@@ -637,6 +637,19 @@ CONFIG_PARTITION_TABLE_MD5=y
 # end of Partition Table
 
 #
+# Flipdot WiFi Configuration
+#
+# default:
+CONFIG_FLIPDOT_WIFI_AP_MODE=y
+# default:
+# CONFIG_FLIPDOT_WIFI_STA_MODE is not set
+# default:
+CONFIG_FLIPDOT_WIFI_SSID="flipdot-controller"
+# default:
+CONFIG_FLIPDOT_WIFI_PASSWORD="flipdot1234"
+# end of Flipdot WiFi Configuration
+
+#
 # Compiler options
 #
 CONFIG_COMPILER_OPTIMIZATION_DEBUG=y

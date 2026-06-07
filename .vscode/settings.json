@@ -3,20 +3,21 @@
   "idf.openOcdConfigs": [
     "board/esp32-wrover-kit-3.3v.cfg"
   ],
-  "idf.port": "detect",
-  "idf.currentSetup": "${userHome}/.espressif/v6.0/esp-idf",
+  "idf.port": "/dev/tty.usbserial-140",
+  "idf.currentSetup": "/Users/sam/.espressif/v6.0/esp-idf",
   "idf.customExtraVars": {
     "IDF_TARGET": "esp32"
   },
-  "clangd.path": "${userHome}/.espressif/tools/esp-clang/esp-20.1.1_20250829/esp-clang/bin/clangd",
+  "clangd.path": "/Users/sam/.espressif/tools/esp-clang/esp-20.1.1_20250829/esp-clang/bin/clangd",
   "clangd.arguments": [
     "--background-index",
     "--query-driver=**",
-    "--compile-commands-dir=${workspaceFolder}/build"
+    "--compile-commands-dir=/Users/sam/Documents/code/esp32-flipdot-controller/build"
   ],
   "chat.tools.terminal.autoApprove": {
     "gcc": true,
     "timeout": true
   },
-  "idf.portWin": "COM7"
+  "idf.portWin": "COM7",
+  "idf.flashType": "UART"
 }
