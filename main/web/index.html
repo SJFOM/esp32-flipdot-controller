@@ -6,28 +6,56 @@
 <title>Flipdot Controller</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:monospace;background:#0d0d0d;color:#ddd;display:flex;flex-direction:column;align-items:center;min-height:100vh;padding:2.5rem 1rem}
-h1{font-size:1.1rem;letter-spacing:.2em;color:#fff;margin-bottom:.3rem}
-.sub{font-size:.7rem;color:#444;letter-spacing:.08em;margin-bottom:2.5rem}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;width:100%;max-width:340px}
-button{padding:1.5rem 1rem;border:2px solid #222;background:#141414;color:#555;font-family:monospace;font-size:.8rem;letter-spacing:.1em;cursor:pointer;border-radius:3px;transition:border-color .12s,color .12s,background .12s;text-transform:uppercase}
+body{font-family:monospace;background:#0d0d0d;color:#ddd;display:flex;flex-direction:column;align-items:center;min-height:100vh;padding:2.5rem 1rem;gap:2rem}
+h1{font-size:1.1rem;letter-spacing:.2em;color:#fff}
+.sub{font-size:.7rem;color:#444;letter-spacing:.08em;margin-top:.3rem}
+.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;width:100%;max-width:340px}
+button{padding:1.4rem 1rem;border:2px solid #222;background:#141414;color:#555;font-family:monospace;font-size:.8rem;letter-spacing:.1em;cursor:pointer;border-radius:3px;transition:border-color .12s,color .12s,background .12s;text-transform:uppercase;-webkit-tap-highlight-color:transparent}
 button:hover{border-color:#444;color:#bbb}
-button.active{border-color:#f5a623;color:#f5a623;background:#19140000}
-.footer{margin-top:2rem;font-size:.65rem;color:#333;letter-spacing:.04em}
+button.active{border-color:#f5a623;color:#f5a623;background:#191400}
+/* snake controls */
+#snake-ctrl{flex-direction:column;align-items:center;gap:1rem;width:100%;max-width:340px}
+.dpad{display:grid;grid-template-columns:repeat(3,72px);grid-template-rows:repeat(2,72px);gap:6px}
+.dpad button{padding:0;font-size:1.4rem;border-radius:4px;width:72px;height:72px}
+.dpad-up{grid-column:2;grid-row:1}
+.dpad-left{grid-column:1;grid-row:2}
+.dpad-down{grid-column:2;grid-row:2}
+.dpad-right{grid-column:3;grid-row:2}
+.btn-restart{width:100%;max-width:222px;padding:.9rem;font-size:.75rem;letter-spacing:.12em;border-color:#444;color:#777}
+.btn-restart:hover{border-color:#aaa;color:#eee}
+.footer{font-size:.65rem;color:#333;letter-spacing:.04em}
 </style>
 </head>
 <body>
-<h1>FLIPDOT CONTROLLER</h1>
-<p class="sub">damow.net</p>
-<div class="grid" id="grid"></div>
+<div style="text-align:center">
+  <h1>FLIPDOT CONTROLLER</h1>
+  <p class="sub">damow.net</p>
+</div>
+
+<div class="mode-grid" id="grid"></div>
+
+<div id="snake-ctrl" style="display:none">
+  <div class="dpad">
+    <button class="dpad-up"    ontouchstart="dir('up')"    onclick="dir('up')">↑</button>
+    <button class="dpad-left"  ontouchstart="dir('left')"  onclick="dir('left')">←</button>
+    <button class="dpad-down"  ontouchstart="dir('down')"  onclick="dir('down')">↓</button>
+    <button class="dpad-right" ontouchstart="dir('right')" onclick="dir('right')">→</button>
+  </div>
+  <button class="btn-restart" onclick="restart()">RESTART</button>
+</div>
+
 <p class="footer" id="status">connecting...</p>
+
 <script>
 var cur=-1;
+var snakeModeId=-1;
 var grid=document.getElementById('grid');
+var snakeCtrl=document.getElementById('snake-ctrl');
 var status=document.getElementById('status');
 
 fetch('/modes').then(function(r){return r.json();}).then(function(modes){
   modes.forEach(function(m){
+    if(m.name==='SNAKE') snakeModeId=m.id;
     var b=document.createElement('button');
     b.id='m'+m.id;
     b.textContent=m.name;
@@ -38,24 +66,34 @@ fetch('/modes').then(function(r){return r.json();}).then(function(modes){
   });
   poll();
   setInterval(poll,1000);
-}).catch(function(){
-  status.textContent='failed to load modes';
-});
+}).catch(function(){status.textContent='failed to load modes';});
 
 function poll(){
   fetch('/mode').then(function(r){return r.json();}).then(function(d){
     if(d.mode!==cur){
       cur=d.mode;
-      var btns=grid.querySelectorAll('button');
-      btns.forEach(function(b){b.classList.remove('active');});
-      var active=document.getElementById('m'+cur);
-      if(active)active.classList.add('active');
+      grid.querySelectorAll('button').forEach(function(b){b.classList.remove('active');});
+      var ab=document.getElementById('m'+cur);
+      if(ab) ab.classList.add('active');
+      snakeCtrl.style.display=(cur===snakeModeId)?'flex':'none';
     }
     status.textContent='updated '+new Date().toLocaleTimeString();
-  }).catch(function(){
-    status.textContent='connection lost';
-  });
+  }).catch(function(){status.textContent='connection lost';});
 }
+
+function dir(d){
+  fetch('/snake/direction',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({direction:d})});
+}
+
+function restart(){
+  fetch('/snake/restart',{method:'POST'});
+}
+
+// Keyboard controls (arrow keys + wasd)
+document.addEventListener('keydown',function(e){
+  var map={'ArrowUp':'up','ArrowDown':'down','ArrowLeft':'left','ArrowRight':'right','w':'up','s':'down','a':'left','d':'right'};
+  if(map[e.key]){e.preventDefault();dir(map[e.key]);}
+});
 </script>
 </body>
 </html>

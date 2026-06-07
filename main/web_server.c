@@ -1,5 +1,6 @@
 #include "web_server.h"
 #include "main.h"
+#include "snake.h"
 #include "esp_http_server.h"
 #include "esp_log.h"
 #include <string.h>
@@ -84,6 +85,37 @@ static esp_err_t mode_post_handler(httpd_req_t *req)
     return ESP_OK;
 }
 
+static esp_err_t snake_direction_post_handler(httpd_req_t *req)
+{
+    char body[32] = {0};
+    if (httpd_req_recv(req, body, sizeof(body) - 1) <= 0) {
+        httpd_resp_send_err(req, HTTPD_400_BAD_REQUEST, "Empty body");
+        return ESP_FAIL;
+    }
+
+    direction_t dir = 0;
+    if      (strstr(body, "\"up\""))    dir = DIRECTION_UP;
+    else if (strstr(body, "\"down\""))  dir = DIRECTION_DOWN;
+    else if (strstr(body, "\"left\""))  dir = DIRECTION_LEFT;
+    else if (strstr(body, "\"right\"")) dir = DIRECTION_RIGHT;
+
+    if (dir == 0) {
+        httpd_resp_send_err(req, HTTPD_400_BAD_REQUEST, "Unknown direction");
+        return ESP_FAIL;
+    }
+
+    snake_set_direction(dir);
+    httpd_resp_sendstr(req, "{}");
+    return ESP_OK;
+}
+
+static esp_err_t snake_restart_post_handler(httpd_req_t *req)
+{
+    snake_request_restart();
+    httpd_resp_sendstr(req, "{}");
+    return ESP_OK;
+}
+
 static const httpd_uri_t uri_root = {
     .uri = "/", .method = HTTP_GET, .handler = root_get_handler
 };
@@ -95,6 +127,12 @@ static const httpd_uri_t uri_mode_get = {
 };
 static const httpd_uri_t uri_mode_post = {
     .uri = "/mode", .method = HTTP_POST, .handler = mode_post_handler
+};
+static const httpd_uri_t uri_snake_dir = {
+    .uri = "/snake/direction", .method = HTTP_POST, .handler = snake_direction_post_handler
+};
+static const httpd_uri_t uri_snake_restart = {
+    .uri = "/snake/restart", .method = HTTP_POST, .handler = snake_restart_post_handler
 };
 
 esp_err_t web_server_start(void)
@@ -113,6 +151,8 @@ esp_err_t web_server_start(void)
     httpd_register_uri_handler(server, &uri_modes_get);
     httpd_register_uri_handler(server, &uri_mode_get);
     httpd_register_uri_handler(server, &uri_mode_post);
+    httpd_register_uri_handler(server, &uri_snake_dir);
+    httpd_register_uri_handler(server, &uri_snake_restart);
 
     return ESP_OK;
 }
