@@ -12,4 +12,8 @@ typedef enum
     MODE_MAX
 } sys_mode_t;
 
+void        mode_set(sys_mode_t new_mode);
+sys_mode_t  mode_get(void);
+const char *mode_name(sys_mode_t m);
+
 #endif

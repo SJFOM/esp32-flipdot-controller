@@ -13,55 +13,49 @@
 
 static const char *TAG = "Snake";
 
-// The dotboard for the snake mode
 static dotboard_t dots;
-
-// Define our snake
 static snake_t snake;
-
-// Define a treat
 static coordinate_t treat;
+
+// Set by web server; consumed each tick by update_direction_user
+static volatile direction_t web_pending_direction = 0;
+// Set by web server; consumed at the top of snake_update
+static volatile bool web_restart_requested = false;
+
+void snake_set_direction(direction_t dir) { web_pending_direction = dir; }
+void snake_request_restart(void)         { web_restart_requested = true; }
 
 /**
  * Listen for keystrokes on the UART and update the snake direction.
  */
+static void apply_direction(snake_t *snake, direction_t dir)
+{
+    if (dir == DIRECTION_UP    && snake->direction != DIRECTION_DOWN)  snake->direction = DIRECTION_UP;
+    if (dir == DIRECTION_DOWN  && snake->direction != DIRECTION_UP)    snake->direction = DIRECTION_DOWN;
+    if (dir == DIRECTION_LEFT  && snake->direction != DIRECTION_RIGHT) snake->direction = DIRECTION_LEFT;
+    if (dir == DIRECTION_RIGHT && snake->direction != DIRECTION_LEFT)  snake->direction = DIRECTION_RIGHT;
+}
+
 static void update_direction_user(snake_t *snake)
 {
+    // Web input
+    direction_t web_dir = web_pending_direction;
+    if (web_dir != 0) {
+        web_pending_direction = 0;
+        apply_direction(snake, web_dir);
+    }
+
+    // UART input (w/a/s/d)
     uint8_t read_char;
     ETS_STATUS s = uart_rx_one_char(&read_char);
     if (s == ETS_OK)
     {
-        // Change the direction as appropriate
         switch (read_char)
         {
-        case 'w':
-            if (snake->direction != DIRECTION_DOWN)
-            {
-                snake->direction = DIRECTION_UP;
-                ESP_LOGI(TAG, "Changed direction to UP");
-            }
-            break;
-        case 'a':
-            if (snake->direction != DIRECTION_RIGHT)
-            {
-                snake->direction = DIRECTION_LEFT;
-                ESP_LOGI(TAG, "Changed direction to LEFT");
-            }
-            break;
-        case 's':
-            if (snake->direction != DIRECTION_UP)
-            {
-                snake->direction = DIRECTION_DOWN;
-                ESP_LOGI(TAG, "Changed direction to DOWN");
-            }
-            break;
-        case 'd':
-            if (snake->direction != DIRECTION_LEFT)
-            {
-                snake->direction = DIRECTION_RIGHT;
-                ESP_LOGI(TAG, "Changed direction to RIGHT");
-            }
-            break;
+        case 'w': apply_direction(snake, DIRECTION_UP);    break;
+        case 's': apply_direction(snake, DIRECTION_DOWN);  break;
+        case 'a': apply_direction(snake, DIRECTION_LEFT);  break;
+        case 'd': apply_direction(snake, DIRECTION_RIGHT); break;
         }
     }
 }
@@ -198,7 +192,12 @@ void death_screen()
 
 void snake_update()
 {
-    // Detect any collisions that occurred in the last frame
+    if (web_restart_requested) {
+        web_restart_requested = false;
+        snake_init();
+        return;
+    }
+
     if (!snake.is_dead)
     {
         // Alter direction

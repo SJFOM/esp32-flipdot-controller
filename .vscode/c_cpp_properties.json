@@ -2,7 +2,7 @@
   "configurations": [
     {
       "name": "ESP-IDF",
-      "compileCommands": "${workspaceFolder}/build/compile_commands.json",
+      "compileCommands": "/Users/sam/Documents/code/esp32-flipdot-controller/build/compile_commands.json",
       "includePath": [
         "${workspaceFolder}/**"
       ],

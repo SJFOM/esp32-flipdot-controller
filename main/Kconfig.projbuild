@@ -1,0 +1,31 @@
+menu "Flipdot WiFi Configuration"
+
+    choice FLIPDOT_WIFI_MODE
+        prompt "WiFi mode"
+        default FLIPDOT_WIFI_AP_MODE
+        help
+            AP: ESP32 creates its own network. Connect to it and browse to http://192.168.4.1.
+            STA: ESP32 joins an existing WiFi network.
+
+        config FLIPDOT_WIFI_AP_MODE
+            bool "Access Point (AP) — ESP32 hosts its own network"
+
+        config FLIPDOT_WIFI_STA_MODE
+            bool "Station (STA) — ESP32 joins existing network"
+    endchoice
+
+    config FLIPDOT_WIFI_SSID
+        string "WiFi SSID"
+        default "flipdot-controller"
+        help
+            AP mode: the network name the ESP32 will broadcast.
+            STA mode: the network name to join.
+
+    config FLIPDOT_WIFI_PASSWORD
+        string "WiFi Password"
+        default "flipdot1234"
+        help
+            AP mode: password for the hosted network (8+ chars required for WPA2, or leave blank for open).
+            STA mode: password for the network to join.
+
+endmenu

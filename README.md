@@ -25,6 +25,40 @@ ESP-IDF requires some packages be installed beforehand - these can be installed 
 brew update; brew install cmake dfu-util
 ```
 
+## Web Interface
+
+The controller hosts a web UI that lets you switch between display modes from any browser on the same network.
+
+### Configuring WiFi
+
+Run `idf.py menuconfig` and navigate to **Flipdot WiFi Configuration**. Two modes are available:
+
+**Access Point (AP) — default**
+
+The ESP32 broadcasts its own WiFi network. No router required.
+
+| Setting | Default |
+|---|---|
+| SSID | `flipdot-controller` |
+| Password | `flipdot1234` |
+
+1. Connect your phone or laptop to the `flipdot-controller` WiFi network
+2. Browse to `http://192.168.4.1`
+
+**Station (STA)**
+
+The ESP32 joins your existing WiFi network. Set the SSID and password to match your router, then flash the firmware. The assigned IP address is printed to the serial monitor on boot — look for a line like:
+
+```
+I (xxxx) wifi_manager: Connected — IP: 192.168.1.xx — browse to http://192.168.1.xx
+```
+
+### Using the UI
+
+The page shows a button for each available mode. The active mode is highlighted. Tap any button to switch instantly — the physical button on the board continues to work as well.
+
+Adding a new mode to `main.h` automatically adds it to the web UI with no frontend changes needed.
+
 ## Testing Animations (Without Hardware)
 
 A standalone C test harness is included to visualize and test animations without physical hardware. Currently supports testing the **Firework Animation**.

@@ -34,5 +34,7 @@ typedef struct {
 // Public subs
 void snake_update();
 void snake_init();
+void snake_set_direction(direction_t dir);
+void snake_request_restart(void);
 
 #endif
